@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Записи работ</h1>
+{% for job in jobs%}
+<div class="col-md6 border rounded">
+    <h2>Action #{{job.id}}</h2>
+    <table class="table"><tr class="table-dark">
+        <td>Название работы</td>
+        <td>Ответственнный</td>
+        <td>Продолжетельность</td>
+        <td>Сокомандники</td>
+        <td>Завершение</td>
+    </tr>
+    <tr>
+        <td class="table-light">{{job.job.is_capitalize}}</td>
+        <td class="table-light">{{user[job.team_leader]}}</td>
+        <td class="table-light">{{job.work_size}} hours</td>
+        <td class="table-light">{{ job.collaborators}}</td>
+        {% if job.is_finished%}
+        <td class="table-success">finished</td>
+        {% else %}
+        <td class="table-danger">not finished</td>
+        {% endif %}
+    </tr>
+    </table>
+</div>
+{% endfor %}
+{% endblock %}
