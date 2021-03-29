@@ -9,11 +9,10 @@
           crossorigin="anonymous">
     <title>{{title}}</title>
 </head>
-<body>
+<body  bgcolor="aqua">
 <header>
     <nav class="navbar navbar-light">
         <a class = "navbar-brand"> Красочные раскраски</a>
-
         {% if current_user.is_authenticated %}
         <a class="navbar-brand" href="/logout">{{ current_user.name }}</a>
             {% else %}
@@ -24,7 +23,6 @@
             {% endif %}
         </nav>
 </header>
-<!-- Begin page content -->
 <main role="main" class="container">
     {% block content %}{% endblock %}
 </main>
