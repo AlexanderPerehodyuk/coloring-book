@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, make_response, session, jsonify
+import os
+
+from flask import Flask, render_template, make_response, jsonify
 from werkzeug.utils import redirect
 import datetime
 from data.users import User
@@ -32,9 +34,11 @@ def main():
     api.add_resource(UsersListResource, '/v2/users')
     api.add_resource(UsersResource, '/v2/users/<int:user_id>')
 
-    app.run(host='0.0.0.0')
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
 
 
+@app.route("/index")
 @app.route("/")
 def index():
     db_sess = db_session.create_session()
@@ -97,5 +101,4 @@ def not_found(error):
 
 
 if __name__ == '__main__':
-
     main()
