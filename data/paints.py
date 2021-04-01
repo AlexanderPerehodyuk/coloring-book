@@ -18,5 +18,4 @@ class Paints(SqlAlchemyBase, SerializerMixin):
     user = orm.relation('User')
 
     def __repr__(self):
-        return f'{self.team_leader} {self.job} {self.work_size} {self.collaborators} {self.start_date} ' \
-               f'{self.end_date} {self.address} {self.is_finished}'
+        return f'{self.author} {self.name} {self.start_date} {self.is_finished}'

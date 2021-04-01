@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import SelectField, StringField, IntegerField, SubmitField
+from wtforms import SelectField, StringField, FileField, SubmitField
 from wtforms.validators import DataRequired
 from data.users import User
 from data import db_session
@@ -13,5 +13,5 @@ class AddJobForm(FlaskForm):
     paint = StringField('Название', validators=[DataRequired()])
     author = SelectField('Автор', validators=[DataRequired()],
                               choices=user_list)
-
-    submit = SubmitField('Добавить картинку')
+    photo = FileField('Добавьте фото', validators=[DataRequired()])
+    submit = SubmitField('Добавить картинку', validators=[DataRequired()])

@@ -9,6 +9,7 @@ from forms.user import RegisterForm, LoginForm
 from flask_login import LoginManager, login_user, login_required, logout_user
 from data import db_session, paints_api
 from flask_restful import Api
+from forms.job import AddJobForm
 from data.user_resurce import UsersListResource, UsersResource
 
 app = Flask(__name__)
@@ -45,6 +46,21 @@ def index():
     paints = db_sess.query(Paints).all()
     user = {u.id: ' '.join((u.name, u.surname)) for u in db_sess.query(User).all()}
     return render_template("index.html", paints=paints, user=user)
+
+
+@app.route('/add_paint', methods=['GET', 'POST'])
+def add_job():
+    form = AddJobForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user_list = {' '.join((u.name, u.surname)): u.id for u in db_sess.query(User).all()}
+        paints = Paints(
+            name=form.paint.data,
+            author=user_list[form.author.data],
+        )
+        db_sess.add(paints)
+        db_sess.commit()
+    return render_template('add_paint.html', title='Добавить фото', form=form)
 
 
 @app.route('/register', methods=['GET', 'POST'])
