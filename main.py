@@ -38,8 +38,8 @@ def main():
     app.run(host='0.0.0.0', port=port)
 
 
-@app.route("/index")
 @app.route("/")
+@app.route("/index")
 def index():
     db_sess = db_session.create_session()
     paints = db_sess.query(Paints).all()
