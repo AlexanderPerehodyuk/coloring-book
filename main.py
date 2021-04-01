@@ -4,10 +4,10 @@ from flask import Flask, render_template, make_response, jsonify
 from werkzeug.utils import redirect
 import datetime
 from data.users import User
-from data.jobs import Jobs
+from data.paints import Paints
 from forms.user import RegisterForm, LoginForm
 from flask_login import LoginManager, login_user, login_required, logout_user
-from data import db_session, jobs_api
+from data import db_session, paints_api
 from flask_restful import Api
 from data.user_resurce import UsersListResource, UsersResource
 
@@ -29,7 +29,7 @@ def load_user(user_id):
 
 def main():
     db_session.global_init("db/blogs.db")
-    app.register_blueprint(jobs_api.blueprint)
+    app.register_blueprint(paints_api.blueprint)
 
     api.add_resource(UsersListResource, '/v2/users')
     api.add_resource(UsersResource, '/v2/users/<int:user_id>')
@@ -42,9 +42,9 @@ def main():
 @app.route("/")
 def index():
     db_sess = db_session.create_session()
-    jobs = db_sess.query(Jobs).all()
+    paints = db_sess.query(Paints).all()
     user = {u.id: ' '.join((u.name, u.surname)) for u in db_sess.query(User).all()}
-    return render_template("index.html", jobs=jobs, user=user)
+    return render_template("index.html", paints=paints, user=user)
 
 
 @app.route('/register', methods=['GET', 'POST'])
