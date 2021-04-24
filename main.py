@@ -86,7 +86,7 @@ def add_job():
                 img.save(f'{paints.name}.jpg')
                 print(os.path.abspath(f'{paints.name}.jpg'))
             except Exception as e:
-                print(e)
+                pass
     return render_template('add_paint.html', title='Добавить фото', form=form)
 
 
