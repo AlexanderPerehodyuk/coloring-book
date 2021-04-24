@@ -1,10 +1,12 @@
 import os
 
+from PIL import Image
 from flask import Flask, render_template, make_response, jsonify
 from werkzeug.utils import redirect
 import datetime
 from data.users import User
 from data.paints import Paints
+from data.graphic_redactor import start
 from forms.user import RegisterForm, LoginForm
 from flask_login import LoginManager, login_user, login_required, logout_user
 from data import db_session, paints_api
@@ -48,8 +50,18 @@ def index():
     return render_template("index.html", paints=paints, user=user)
 
 
+@app.route("/photo_redactor/name")
+def redactor(name):
+    start(name)
+    db_sess = db_session.create_session()
+    paints = db_sess.query(Paints).all()
+    user = {u.id: ' '.join((u.name, u.surname)) for u in db_sess.query(User).all()}
+    return render_template("index.html", paints=paints, user=user)
+
+
 @app.route('/add_paint', methods=['GET', 'POST'])
 def add_job():
+    print('adding')
     form = AddJobForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
@@ -57,9 +69,24 @@ def add_job():
         paints = Paints(
             name=form.paint.data,
             author=user_list[form.author.data],
+            start_date=datetime.datetime.now()
         )
+        print(paints, form.photo)
         db_sess.add(paints)
         db_sess.commit()
+        try:
+            file = open(f'{paints.name}.jpg')
+            print(os.path.abspath(f'{paints.name}.jpg'))
+            return render_template('add_paint.html', title='Такое название макета уже есть', form=form)
+        except FileNotFoundError as e:
+            try:
+                file = open(f'{paints.name}.jpg', 'w')
+                img = Image.open(file)
+                img = Image.blend(img, form.photo)
+                img.save(f'{paints.name}.jpg')
+                print(os.path.abspath(f'{paints.name}.jpg'))
+            except Exception as e:
+                print(e)
     return render_template('add_paint.html', title='Добавить фото', form=form)
 
 

@@ -1,18 +1,19 @@
 {% extends "base.html" %}
-
 {% block content %}
 <h1>Выбрать раскраску</h1>
 {% for paint in paints%}
 <div class="col-md6 border rounded">
-    <h2>Раскраска номер {{paint.id}}</h2>
+    <a href="/photo_redactor/image_mars.jpg">Раскраска номер {{paint.id}}</a>
     <table class="table"><tr class="table-dark">
         <td>Название раскрасски</td>
         <td>Автор</td>
+        <td>Дата добавления</td>
         <td>Завершение</td>
     </tr>
     <tr>
-        <td class="table-light">{{paint.name.is_capitalize}}</td>
+        <td class="table-light">{{paint.name}}</td>
         <td class="table-light">{{user[paint.author]}}</td>
+        <td class="table-light">{{paint.start_date}}</td>
         {% if paint.is_finished%}
         <td class="table-success">finished</td>
         {% else %}

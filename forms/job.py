@@ -11,7 +11,6 @@ class AddJobForm(FlaskForm):
     db_sess = db_session.create_session()
     user_list = [' '.join((u.name, u.surname)) for u in db_sess.query(User).all()]
     paint = StringField('Название', validators=[DataRequired()])
-    author = SelectField('Автор', validators=[DataRequired()],
-                              choices=user_list)
+    author = SelectField('Автор', validators=[DataRequired()], choices=user_list)
     photo = FileField('Добавьте фото', validators=[DataRequired()])
     submit = SubmitField('Добавить картинку', validators=[DataRequired()])
