@@ -46,17 +46,17 @@ def main():
 def index():
     db_sess = db_session.create_session()
     paints = db_sess.query(Paints).all()
+    print(paints)
+    links = ['/photo_redactor/' + str(paint.name) for paint in paints]
+    print(links)
     user = {u.id: ' '.join((u.name, u.surname)) for u in db_sess.query(User).all()}
-    return render_template("index.html", paints=paints, user=user)
+    return render_template("index.html", paints=paints, user=user, links=links)
 
 
 @app.route("/photo_redactor/name")
 def redactor(name):
     start(name)
-    db_sess = db_session.create_session()
-    paints = db_sess.query(Paints).all()
-    user = {u.id: ' '.join((u.name, u.surname)) for u in db_sess.query(User).all()}
-    return render_template("index.html", paints=paints, user=user)
+    index()
 
 
 @app.route('/add_paint', methods=['GET', 'POST'])

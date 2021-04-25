@@ -7,39 +7,26 @@ from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QLabel, QMenuBar
 
 
 class mw(QMainWindow):
-
-    def __init__(self):
+    def __init__(self, p):
         super().__init__()
-        # устанавливаем размеры
         self.resize(500, 500)
-        # устанавливаем название
         self.setWindowTitle("MyPaintAnalog")
-        # устанавливаем холст, его цвет
         self.image = QImage(self.size(), QImage.Format_RGB32)
         self.image.fill(Qt.white)
         self.pixmap = QPixmap.fromImage(self.image)
 
-        # устанавливаем, чтобы изанчальнно не рисовали
         self.drawing = False
-        # устанавливаем размер кисточки
         self.brushSize = 3
-        # цвет кисточки
         self.brushColor = Qt.black
 
         self.brushLine = Qt.SolidLine
-        # последняя точка
         self.currentPoint = self.lastPoint = QPoint()
-        # для выбора чем рисовать пригодиться
         self.brushTipe = 0
-        # делаем menuBar чтобы там были элементы для изменения увета, размера кисточки, сохранения нарисованного и очистки
         mainMenu = self.menuBar()
-        # добавления меню для работы с файлом(сохранене, очистки)
         fileMenu = mainMenu.addMenu("файл")
 
-        # добавление меню для изменение размера кисточки
         brushMenu = mainMenu.addMenu("Размер")
 
-        # добавление меню для измение цвета кисточки
         brushColor = mainMenu.addMenu("Цвет")
 
         brushLine = mainMenu.addMenu("Линия")
@@ -85,16 +72,11 @@ class mw(QMainWindow):
         brush.addAction(blineAction)
         blineAction.triggered.connect(self.bline)
 
-        # создание кнопки для сохранения картинки
         saveAction = QAction("Сохранить", self)
-        # добавление ей быстрой клавиши
         saveAction.setShortcut("Cntrl+S")
-        # добавление в меня для работы с файлом
         fileMenu.addAction(saveAction)
-        # присваивание ей метода при нажатии
         saveAction.triggered.connect(self.save)
 
-        # анологично как и для сохранение
         clearAction = QAction("Очистить", self)
         clearAction.setShortcut("Cntrl+C")
         fileMenu.addAction(clearAction)
@@ -105,17 +87,14 @@ class mw(QMainWindow):
         fileMenu.addAction(openAction)
         openAction.triggered.connect(self.open)
 
-        # тоже самое но без быстрой клавиши
         tpAction = QAction("Выбрать толщину", self)
         brushMenu.addAction(tpAction)
         tpAction.triggered.connect(self.tp)
 
-        # анологично как и для выбора тощины
         whiteAction = QAction("Стерка", self)
         brushColor.addAction(whiteAction)
         whiteAction.triggered.connect(self.wColor)
 
-        # анологично как и для 3 пикселей
         colorAction = QAction("Выбрать цвет", self)
         brushColor.addAction(colorAction)
         colorAction.triggered.connect(self.bColor)
@@ -123,9 +102,9 @@ class mw(QMainWindow):
         fillAction = QAction("Залить экран", self)
         brushColor.addAction(fillAction)
         fillAction.triggered.connect(self.fill)
+        self.open(p)
 
     def mousePressEvent(self, event):
-        # при нажатии на кнопку в последнию кнопку передается места где была нажата кнопка и рисование становиться True
         if event.button() == Qt.LeftButton:
             self.drawing = True
             self.lastPoint = event.pos()
@@ -193,8 +172,11 @@ class mw(QMainWindow):
         else:
             self.image.save(filePath)
 
-    def open(self):
-        filePath, _ = QFileDialog.getOpenFileName(self, "Save Image", "", "PNG(*.png);;JPEG(*.jpg *.jpeg)")
+    def open(self, *arg):
+        if arg != '':
+            filePath = arg
+        else:
+            filePath, _ = QFileDialog.getOpenFileName(self, "Save Image", "", "PNG(*.png);;JPEG(*.jpg *.jpeg)")
         if filePath == "":
             return
         else:
@@ -315,7 +297,6 @@ class BrushSize(QWidget):
 
 def start(name):
     app = QApplication(sys.argv)
-    ex = mw()
+    ex = mw(name + '.jpg')
     ex.show()
-    ex.open(name)
     sys.exit(app.exec())
