@@ -42,6 +42,7 @@ def main():
 
 
 @app.route("/")
+@app.route("")
 @app.route("/index")
 def index():
     db_sess = db_session.create_session()

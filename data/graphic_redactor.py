@@ -1,9 +1,9 @@
 import sys
 
 from PyQt5.QtCore import Qt, QPoint, QRect
-from PyQt5.QtGui import QMouseEvent, QImage, QPen, QPainter, QPixmap
-from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QLabel, QMenuBar, QMenu, QAction, QFileDialog, QSlider, \
-    QColorDialog, QPushButton, QInputDialog
+from PyQt5.QtGui import QImage, QPen, QPainter, QPixmap
+from PyQt5.QtWidgets import QWidget, QApplication, QMainWindow, QAction, QFileDialog, QSlider, QColorDialog,\
+    QPushButton, QInputDialog
 
 
 class mw(QMainWindow):
@@ -176,7 +176,7 @@ class mw(QMainWindow):
         if arg != '':
             filePath = arg
         else:
-            filePath, _ = QFileDialog.getOpenFileName(self, "Save Image", "", "PNG(*.png);;JPEG(*.jpg *.jpeg)")
+            filePath, _ = QFileDialog.getOpenFileName(self, "Open Image", "", "PNG(*.png);;JPEG(*.jpg *.jpeg)")
         if filePath == "":
             return
         else:
